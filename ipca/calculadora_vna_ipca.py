@@ -30,4 +30,4 @@ def calcular_vna():
 
 # -------------------------------
 vna_hoje = calcular_vna()
-print(f"📊 VNA atualizado em {datetime.today().date()}: R$ {vna_hoje:,.2f}")
+#print(f"📊 VNA atualizado em {datetime.today().date()}: R$ {vna_hoje:,.2f}")
