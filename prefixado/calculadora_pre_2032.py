@@ -11,7 +11,7 @@ import pandas as pd
 from datetime import datetime, date
 from buscador import buscar_tesouro_prefixado_2032
 from extrair_dados import extrair_dados_prefixados_2032
-from calcular_dias_uteis import calcular_dias_uteis
+from selic.calcular_dias_uteis import calcular_dias_uteis
 from calcular_pu_prefixado import calcular_pu_prefixado_oficial
  
 def calculadora_completa_prefixado_2032():

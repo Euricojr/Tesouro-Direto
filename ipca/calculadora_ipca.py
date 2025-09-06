@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 from datetime import datetime, timedelta
 from calculadora_vna_ipca import calcular_vna
-from calcular_dias_uteis import calcular_dias_uteis
+from selic.calcular_dias_uteis import calcular_dias_uteis
 from função_obter_ultimo_dia_15 import obter_ultimo_dia_15
 from calcular_vna_projetado_ipca import calcular_vna_projetado
 
