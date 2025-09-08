@@ -1,6 +1,6 @@
 from buscar_prefixados import buscar_prefixado_por_ano
 from extrair_dados import extrair_dados_prefixado_qualquer_ano     
-from selic.calcular_dias_uteis import calcular_dias_uteis
+from calcular_dias_uteis import calcular_dias_uteis
 from calcular_pu_prefixado import calcular_pu_prefixado_oficial
 
 
