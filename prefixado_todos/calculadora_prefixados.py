@@ -27,20 +27,20 @@ def calculadora_prefixado_por_ano(ano, taxa_anual):
     # Passo 2: Extrair dados
     dados = extrair_dados_prefixado_qualquer_ano(index_titulo, dados_titulo)
     
-    print(f"\n📋 DADOS EXTRAÍDOS:")
-    print(f"Título: {dados['nome']}")
+    #print(f"\n📋 DADOS EXTRAÍDOS:")
+    #print(f"Título: {dados['nome']}")
     print(f"Vencimento: {dados['vencimento']}")
-    print(f"PU da Biblioteca: R$ {dados['pu_biblioteca']:,.6f}")
-    print(f"Valor Nominal: R$ {dados['valor_nominal']:,.2f}")
+    #print(f"PU da Biblioteca: R$ {dados['pu_biblioteca']:,.6f}")
+    #print(f"Valor Nominal: R$ {dados['valor_nominal']:,.2f}")
     
     # Passo 3: Calcular dias úteis
     du, dias_corridos = calcular_dias_uteis(dados['data_consulta'], dados['vencimento'])
     
-    print(f"\n📅 CÁLCULO DE PRAZO:")
-    print(f"Data atual: {dados['data_consulta']}")
-    print(f"Data vencimento: {dados['vencimento']}")
-    print(f"Dias corridos: {dias_corridos}")
-    print(f"Dias úteis (du): {du}")
+    #print(f"\n📅 CÁLCULO DE PRAZO:")
+    #print(f"Data atual: {dados['data_consulta']}")
+    #print(f"Data vencimento: {dados['vencimento']}")
+    #print(f"Dias corridos: {dias_corridos}")
+    #print(f"Dias úteis (du): {du}")
     
     # Passo 4: Usar a taxa informada
     print(f"\n🔢 USANDO TAXA: {taxa_anual}% a.a.")
@@ -53,32 +53,32 @@ def calculadora_prefixado_por_ano(ano, taxa_anual):
     )
     
     # Passo 6: Comparar resultados
-    print(f"\n📊 COMPARAÇÃO DE RESULTADOS:")
-    print("-" * 40)
-    print(f"PU da Biblioteca: R$ {dados['pu_biblioteca']:,.6f}")
+   # print(f"\n📊 COMPARAÇÃO DE RESULTADOS:")
+    #print("-" * 40)
+    #print(f"PU da Biblioteca: R$ {dados['pu_biblioteca']:,.6f}")
     print(f"PU Calculado:     R$ {pu_calculado:,.6f}")
     
-    diferenca = abs(dados['pu_biblioteca'] - pu_calculado)
-    diferenca_percent = (diferenca / dados['pu_biblioteca']) * 100
+    #diferenca = abs(dados['pu_biblioteca'] - pu_calculado)
+    #diferenca_percent = (diferenca / dados['pu_biblioteca']) * 100
     
-    print(f"Diferença:        R$ {diferenca:,.6f}")
-    print(f"Diferença %:      {diferenca_percent:.4f}%")
+    #print(f"Diferença:        R$ {diferenca:,.6f}")
+    #print(f"Diferença %:      {diferenca_percent:.4f}%")
     
     # Análise do resultado
-    print(f"\n🎯 ANÁLISE:")
-    if diferenca < 0.01:
-        print("✅ EXCELENTE! Os valores estão praticamente idênticos!")
-        print("A fórmula está correta!")
-    elif diferenca < 1.5:
-        print("✅ MUITO BOM! Diferença mínima, provavelmente devido a arredondamentos.")
-    else:
-        print("⚠️  DIFERENÇA SIGNIFICATIVA!")
-        print("Possíveis causas:")
-        print("- Taxa informada está incorreta")
-        print("- Cálculo de dias úteis diferente")
-        print("- Método de arredondamento diferente")
+    #print(f"\n🎯 ANÁLISE:")
+    #if diferenca < 0.01:
+       # print("✅ EXCELENTE! Os valores estão praticamente idênticos!")
+        #print("A fórmula está correta!")
+    #elif diferenca < 1.5:
+       # print("✅ MUITO BOM! Diferença mínima, provavelmente devido a arredondamentos.")
+    #else:
+      # print("⚠️  DIFERENÇA SIGNIFICATIVA!")
+      #  print("Possíveis causas:")
+       # print("- Taxa informada está incorreta")
+        #print("- Cálculo de dias úteis diferente")
+        #print("- Método de arredondamento diferente")
     
-    return dados, pu_calculado
+   # return dados, pu_calculado
 
 
 def calculadora_todos_prefixados_com_taxas():
@@ -90,7 +90,7 @@ def calculadora_todos_prefixados_com_taxas():
     print("=" * 70)
     
     # Primeiro, descobre quais anos estão disponíveis
-    from prefixado_todos.calculadora_prefixados import buscar_titulos_prefixados
+    from calculadora_prefixados import buscar_titulos_prefixados
     
     titulos_prefixados = buscar_titulos_prefixados()
     
