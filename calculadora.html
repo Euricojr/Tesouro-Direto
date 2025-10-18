@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Calculadora Tesouro Direto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #e0e0e0;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideUp 0.5s;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .price-highlight {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .price-highlight .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .price-highlight .value {
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #856404;
+        }
+
+        .info-box p {
+            color: #856404;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Calculadora Tesouro Direto</h1>
+            <p>Precificação de Títulos Públicos</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('prefixado')">
+                📊 Tesouro Prefixado
+            </button>
+            <button class="tab" onclick="switchTab('selic')">
+                📈 Tesouro Selic
+            </button>
+            <button class="tab" onclick="switchTab('ipca')">
+                💹 Tesouro IPCA+
+            </button>
+        </div>
+
+        <div class="content">
+            <!-- TESOURO PREFIXADO -->
+            <div id="prefixado" class="tab-content active">
+                <form onsubmit="calcularPrefixado(event)">
+                    <div class="form-group">
+                        <label>📅 Ano de vencimento</label>
+                        <input type="text" id="ano_pref" value="2029" placeholder="Ex: 2029">
+                    </div>
+                    <div class="form-group">
+                        <label>📈 Taxa anual (%)</label>
+                        <input type="text" id="taxa_pref" value="13.92" placeholder="Ex: 13.92">
+                    </div>
+                    <button type="submit" class="btn">🚀 Calcular Prefixado</button>
+                </form>
+
+                <div id="result_pref" class="result">
+                    <div class="price-highlight">
+                        <div class="label">💎 Preço Unitário (PU)</div>
+                        <div class="value" id="pu_pref">R$ 0,00</div>
+                    </div>
+                    <div class="result-title">📋 Detalhes do Cálculo</div>
+                    <div class="result-item">
+                        <span class="result-label">Taxa Utilizada</span>
+                        <span class="result-value" id="taxa_usado_pref">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Dias Úteis</span>
+                        <span class="result-value" id="dias_uteis_pref">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Dias Corridos</span>
+                        <span class="result-value" id="dias_corridos_pref">-</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>📖 Fórmula Utilizada</strong>
+                    <p>PU = VN / [(Taxa/100 + 1)^(dias_úteis/252)]</p>
+                    <p>Onde VN = R$ 1.000,00 (Valor Nominal)</p>
+                </div>
+            </div>
+
+            <!-- TESOURO SELIC -->
+            <div id="selic" class="tab-content">
+                <form onsubmit="calcularSelic(event)">
+                    <div class="form-group">
+                        <label>📅 Ano de vencimento</label>
+                        <input type="text" id="ano_selic" value="2029" placeholder="Ex: 2029">
+                    </div>
+                    <div class="form-group">
+                        <label>📊 Taxa contratada (%) - Ágio ou Deságio</label>
+                        <input type="text" id="taxa_cont_selic" value="0.00" placeholder="Ex: -0.0291 ou 0.05">
+                    </div>
+                    <div class="form-group">
+                        <label>📈 Taxa Selic projetada (% a.a.)</label>
+                        <input type="text" id="taxa_selic" value="11.75" placeholder="Ex: 11.75">
+                    </div>
+                    <button type="submit" class="btn">🚀 Calcular Selic</button>
+                </form>
+
+                <div id="result_selic" class="result">
+                    <div class="price-highlight">
+                        <div class="label">💎 Preço Unitário</div>
+                        <div class="value" id="pu_selic">R$ 0,00</div>
+                    </div>
+                    <div class="result-title">📋 Detalhes do Cálculo</div>
+                    <div class="result-item">
+                        <span class="result-label">VNA Projetado</span>
+                        <span class="result-value" id="vna_proj_selic">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Cotação</span>
+                        <span class="result-value" id="cotacao_selic">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Dias Úteis</span>
+                        <span class="result-value" id="dias_uteis_selic">-</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>📖 Fórmulas Utilizadas</strong>
+                    <p>VNA projetado = VNA atual × (1 + Selic_diária)</p>
+                    <p>Cotação = 100 / (1 + taxa)^(dias_úteis/252)</p>
+                    <p>Preço = VNA_projetado × Cotação / 100</p>
+                </div>
+            </div>
+
+            <!-- TESOURO IPCA+ -->
+            <div id="ipca" class="tab-content">
+                <form onsubmit="calcularIPCA(event)">
+                    <div class="form-group">
+                        <label>📅 Ano de vencimento</label>
+                        <input type="text" id="ano_ipca" value="2029" placeholder="Ex: 2029, 2035, 2045">
+                    </div>
+                    <div class="form-group">
+                        <label>📊 Taxa real (% a.a.)</label>
+                        <input type="text" id="taxa_real" value="6.13" placeholder="Ex: 6.13">
+                    </div>
+                    <div class="form-group">
+                        <label>📈 IPCA projetado mensal (%)</label>
+                        <input type="text" id="ipca_mensal" value="0.59" placeholder="Ex: 0.59">
+                    </div>
+                    <button type="submit" class="btn">🚀 Calcular IPCA+</button>
+                </form>
+
+                <div id="result_ipca" class="result">
+                    <div class="price-highlight">
+                        <div class="label">💎 Preço Unitário</div>
+                        <div class="value" id="pu_ipca">R$ 0,00</div>
+                    </div>
+                    <div class="result-title">📋 Detalhes do Cálculo</div>
+                    <div class="result-item">
+                        <span class="result-label">VNA Atual</span>
+                        <span class="result-value" id="vna_atual_ipca">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">VNA Projetado</span>
+                        <span class="result-value" id="vna_proj_ipca">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Cotação</span>
+                        <span class="result-value" id="cotacao_ipca">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Dias Úteis</span>
+                        <span class="result-value" id="dias_uteis_ipca">-</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>📖 Fórmulas Utilizadas</strong>
+                    <p>VNA base: R$ 1.000 em julho/2000, corrigido pelo IPCA</p>
+                    <p>VNA projetado = VNA atual × (1 + IPCA_mensal)</p>
+                    <p>Cotação = 100 / (1 + taxa_real)^(dias_úteis/252)</p>
+                    <p>Preço = VNA_projetado × Cotação / 100</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para trocar abas
+        function switchTab(tabName) {
+            // Esconder todos os conteúdos
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Desativar todas as abas
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Ativar a aba clicada
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Função para calcular dias úteis
+        function calcularDiasUteis(dataAtual, dataVencimento) {
+            const diasCorridos = Math.floor((dataVencimento - dataAtual) / (1000 * 60 * 60 * 24));
+            const diasUteis = Math.floor(diasCorridos * (252 / 365));
+            return { diasUteis, diasCorridos };
+        }
+
+        // CALCULADORA TESOURO PREFIXADO
+        function calcularPrefixado(event) {
+            event.preventDefault();
+            
+            const ano = parseInt(document.getElementById('ano_pref').value);
+            const taxa = parseFloat(document.getElementById('taxa_pref').value.replace(',', '.'));
+            
+            // Data de vencimento: 01/01 do ano informado
+            const dataVencimento = new Date(ano, 0, 1);
+            const dataAtual = new Date();
+            
+            const { diasUteis, diasCorridos } = calcularDiasUteis(dataAtual, dataVencimento);
+            
+            // Fórmula: PU = VN / [(Taxa/100 + 1)^(du/252)]
+            const vn = 1000;
+            const base = (taxa / 100) + 1;
+            const expoente = diasUteis / 252;
+            const pu = vn / Math.pow(base, expoente);
+            
+            // Mostrar resultado
+            document.getElementById('pu_pref').textContent = `R$ ${pu.toFixed(2)}`;
+            document.getElementById('taxa_usado_pref').textContent = `${taxa.toFixed(2)}% a.a.`;
+            document.getElementById('dias_uteis_pref').textContent = `${diasUteis} dias`;
+            document.getElementById('dias_corridos_pref').textContent = `${diasCorridos} dias`;
+            document.getElementById('result_pref').classList.add('show');
+        }
+
+        // CALCULADORA TESOURO SELIC
+        function calcularSelic(event) {
+            event.preventDefault();
+            
+            const ano = parseInt(document.getElementById('ano_selic').value);
+            const taxaContratada = parseFloat(document.getElementById('taxa_cont_selic').value.replace(',', '.')) / 100;
+            const taxaSelic = parseFloat(document.getElementById('taxa_selic').value.replace(',', '.')) / 100;
+            
+            // VNA Selic estimado (valor aproximado)
+            const vnaAtual = 14600; // Valor aproximado de outubro/2024
+            
+            // Calcular VNA projetado (D+1)
+            const taxaSelicDiaria = Math.pow(1 + taxaSelic, 1/252) - 1;
+            const vnaProjetado = vnaAtual * (1 + taxaSelicDiaria);
+            
+            // Data de vencimento: 01/03 do ano informado
+            const dataVencimento = new Date(ano, 2, 1);
+            const dataAtual = new Date();
+            
+            const { diasUteis, diasCorridos } = calcularDiasUteis(dataAtual, dataVencimento);
+            
+            // Calcular cotação
+            const cotacao = 100 / Math.pow(1 + taxaContratada, diasUteis / 252);
+            
+            // Calcular preço
+            const preco = vnaProjetado * (cotacao / 100);
+            
+            // Mostrar resultado
+            document.getElementById('pu_selic').textContent = `R$ ${preco.toFixed(2)}`;
+            document.getElementById('vna_proj_selic').textContent = `R$ ${vnaProjetado.toFixed(2)}`;
+            document.getElementById('cotacao_selic').textContent = `${cotacao.toFixed(4)}%`;
+            document.getElementById('dias_uteis_selic').textContent = `${diasUteis} dias`;
+            document.getElementById('result_selic').classList.add('show');
+        }
+
+        // CALCULADORA TESOURO IPCA+
+        function calcularIPCA(event) {
+            event.preventDefault();
+            
+            const ano = parseInt(document.getElementById('ano_ipca').value);
+            const taxaReal = parseFloat(document.getElementById('taxa_real').value.replace(',', '.')) / 100;
+            const ipcaMensal = parseFloat(document.getElementById('ipca_mensal').value.replace(',', '.')) / 100;
+            
+            // VNA IPCA+ estimado (valor aproximado de outubro/2024)
+            const vnaAtual = 4561.46;
+            
+            // Calcular VNA projetado
+            const vnaProjetado = vnaAtual * (1 + ipcaMensal);
+            
+            // Determinar data de vencimento (maio para ímpar, agosto para par)
+            let dataVencimento;
+            if (ano % 2 === 1) {
+                dataVencimento = new Date(ano, 4, 15); // Maio
+            } else {
+                dataVencimento = new Date(ano, 7, 15); // Agosto
+            }
+            
+            const dataAtual = new Date();
+            const { diasUteis, diasCorridos } = calcularDiasUteis(dataAtual, dataVencimento);
+            
+            // Calcular cotação
+            const cotacao = 100 / Math.pow(1 + taxaReal, diasUteis / 252);
+            
+            // Calcular preço
+            const preco = vnaProjetado * (cotacao / 100);
+            
+            // Mostrar resultado
+            document.getElementById('pu_ipca').textContent = `R$ ${preco.toFixed(2)}`;
+            document.getElementById('vna_atual_ipca').textContent = `R$ ${vnaAtual.toFixed(2)}`;
+            document.getElementById('vna_proj_ipca').textContent = `R$ ${vnaProjetado.toFixed(2)}`;
+            document.getElementById('cotacao_ipca').textContent = `${cotacao.toFixed(4)}%`;
+            document.getElementById('dias_uteis_ipca').textContent = `${diasUteis} dias`;
+            document.getElementById('result_ipca').classList.add('show');
+        }
+    </script>
+</body>
+</html>
