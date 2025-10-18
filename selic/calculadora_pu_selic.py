@@ -1,11 +1,74 @@
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
-from obter_vna_selic import obter_vna_selic_atual
-from vna_projetado_selic import calcular_vna_selic_projetado
-from cotacao import calcular_cotacao_selic
-from calcular_dias_uteis import calcular_dias_uteis
 
+
+
+
+def calcular_vna_selic_projetado(vna_atual, taxa_selic_anual):
+    """
+    Calcula VNA projetado para D+1 (liquidação)
+    VNA_projetado = VNA_atual × (1 + taxa_selic_diaria)
+    """
+    # Converter taxa anual para diária
+    taxa_selic_diaria = (1 + taxa_selic_anual) ** (1/252) - 1
+    
+    vna_projetado = vna_atual * (1 + taxa_selic_diaria)
+    
+    print(f"Taxa Selic anual: {taxa_selic_anual*100:.2f}%")
+    print(f"Taxa Selic diária: {taxa_selic_diaria*100:.6f}%")
+    print(f"VNA atual: R$ {vna_atual:,.2f}")
+    print(f"VNA projetado (D+1): R$ {vna_projetado:,.2f}")
+    
+    return vna_projetado
+
+def calcular_cotacao_selic(taxa_contratada, dias_uteis):
+    """
+    Calcula cotação do Tesouro Selic
+    Cotação (%) = 100 / (1 + taxa_contratada)^(dias_uteis/252)
+    
+    Args:
+        taxa_contratada (float): Taxa de ágio/deságio em decimal
+        dias_uteis (int): Dias úteis até vencimento
+    """
+    expoente = dias_uteis / 252
+    cotacao = 100 / ((1 + taxa_contratada) ** expoente)
+    
+    return cotacao
+
+def calcular_dias_uteis(data_atual, data_vencimento):
+    """
+    Calcula dias úteis entre duas datas (aproximação usando 252 dias úteis/ano)
+    """
+    dias_corridos = (data_vencimento - data_atual).days
+    dias_uteis = int(dias_corridos * (252 / 365))
+    return dias_uteis, dias_corridos
+
+
+def obter_vna_selic_atual():
+    url = "https://brasilindicadores.com.br/titulos-publicos/vna"
+
+    try:
+        # Lê todas as tabelas da página
+        tabelas = pd.read_html(url)
+       
+
+        # A tabela da LFT (Tesouro Selic) normalmente é a terceira (índice 2)
+        tabela_lft = tabelas[2]
+
+        # Extrair linha da LFT
+        linha = tabela_lft.iloc[0]  
+        data_ref = linha["Dt. referência"]
+        vna = float(str(linha["VNA"]).replace("R$", "").replace(".", "").replace(",", "."))
+
+        return vna, data_ref
+    
+    except Exception as e:
+        print(f"Erro ao obter VNA alternativo: {e}")
+        return None, None
+if __name__ == "__main__":
+    vna, data = obter_vna_selic_atual()
+    print(vna)
 
 
 
